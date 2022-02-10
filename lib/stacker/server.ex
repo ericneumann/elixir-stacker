@@ -22,11 +22,6 @@ defmodule Stacker.Server do
     {:reply, reply, new_stack}
   end
 
-  def terminate(reason, _initial_stack) do
-    IO.puts "going awaaaaaay because #{reason}"
-    System.halt(1)
-  end
-
   def handle_cast({:push, item}, initial_stack) do
     {:noreply, initial_stack ++ [item]}
   end
