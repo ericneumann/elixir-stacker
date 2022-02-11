@@ -5,7 +5,8 @@ defmodule Stacker.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Stacker.Server, ["frank", "bob", "mary", "ed"]}
+      {Stacker.Server, nil},
+      {Stacker.Stash, ["frank", "bob", "mary", "ed"]}
     ]
 
     opts = [strategy: :one_for_one, name: Sequence.Supervisor]

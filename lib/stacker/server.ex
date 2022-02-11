@@ -1,8 +1,10 @@
 defmodule Stacker.Server do
   use GenServer
 
-  def start_link(initial_stack) do
-    GenServer.start_link(__MODULE__, initial_stack, name: __MODULE__)
+  alias Stacker.Stash
+
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   def push_item(item) do
@@ -13,16 +15,18 @@ defmodule Stacker.Server do
     GenServer.call __MODULE__, :pop
   end
 
-  def init(initial_stack) do
-    {:ok, initial_stack}
+  def init(_) do
+    {:ok, nil}
   end
 
-  def handle_call(:pop, _from, initial_stack) do
-    {reply, new_stack} = List.pop_at(initial_stack, 0)
-    {:reply, reply, new_stack}
+  def handle_call(:pop, _from, _) do
+    item = Stash.pop()
+    IO.puts item
+    {:reply, item, nil}
   end
 
-  def handle_cast({:push, item}, initial_stack) do
-    {:noreply, initial_stack ++ [item]}
+  def handle_cast({:push, item}, _) do
+    Stash.push item
+    {:noreply, nil}
   end
 end
